@@ -1,0 +1,31 @@
+not true  = false .
+not false = true .
+
+lt X 0         = false .
+lt 0 (s Y)     = true .
+lt (s X) (s Y) = lt X Y .
+
+geq X Y = not (lt X Y) .
+
+append nil YS         = YS .
+append (cons X XS) YS = cons X (append XS YS) .
+
+filter P nil         = nil .
+filter P (cons X XS) = if_filter P X XS (P X) .
+if_filter P X XS true  = cons X (filter P XS) .
+if_filter P X XS false = filter P XS .
+
+qsort nil         = nil .
+qsort (cons X XS) = append (qsort (filter (geq X) XS))
+                           (cons X (qsort (filter (lt X) XS))) .
+
+reverse nil         = nil .
+reverse (cons X XS) = append (reverse XS) (cons X nil) .
+
+shuffle nil         = nil .
+shuffle (cons X XS) = cons X (reverse (shuffle XS)) .
+
+range 0     = nil .
+range (s X) = cons X (range X) .
+
+main = qsort (shuffle (range 100)) .
