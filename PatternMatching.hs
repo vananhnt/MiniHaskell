@@ -6,11 +6,12 @@ import Parser
 --     deriving (Show, Eq)
 -- K x y = App ( App K x) y
 
-type Substitution = [(String, Term)] -- x -> Term
+-- x -> Term
 
 t1 = App (App (Con "add") (Con "0")) (Var "x")
 u1 = App (App (Con "add") (Con "0")) (App (Con "s") (Var "x"))
-
+x1 = App (Con "s") (Var "x")
+-- drop marked part to patern matching 
 --sigma is the list of saved subtitutions
 match' :: Substitution -> [(Term, Term)] -> Maybe Substitution
 match' sigma [] = Just sigma
