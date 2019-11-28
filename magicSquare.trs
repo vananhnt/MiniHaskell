@@ -77,6 +77,6 @@ ok (cons X1 (cons X2 (cons X3 (cons X4 (cons X5 (cons X6 (cons X7 (cons X8 X9)))
 fst nil = nil .
 fst (cons X XS) = X .
 
-magicSquare =  filter ok permutations (range 10).
+magicSquare =  filter ok (permutations (range 10)).
 main = magicSquare.
 
