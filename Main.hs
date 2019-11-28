@@ -73,7 +73,10 @@ nf2 trs t = nf2 trs (rewrite2 trs t)
 --data Context = Hole| CApp1 Context Term | CApp2 MTerm Context
 --type Zipper = (Context u, MTerm)
 --data MTerm = MApp MTerm MTerm | MCon String | NF Term
- 
+tranform :: MTerm -> Term
+tranform (MCon s) = Con s
+tranform (NF x) = x
+tranform (MApp l r) = App (tranform l) (tranform r)
 -- rewrite3 R (Cu1, t1) = (Cu2, t2) if (Cu1, t1) -> (Cu2, t2)
 rewrite3 :: TRS -> Zipper -> Zipper
 
@@ -83,27 +86,22 @@ rewrite3 trs (CApp1 c t, NF x)
 rewrite3 trs (CApp2 mt c, NF x) 
   | Just u <- rewriteAtRoot2 trs x = (CApp2 mt c, u)
   | otherwise = (CApp1 c x, mt)
-
 rewrite3 trs (c, MCon x) 
   | Just u <- rewriteAtRoot2 trs (toTerm (MCon x)) = (c, u)
   | otherwise = (c, NF (toTerm (MCon x)))
--- rewrite3 trs (c, MApp l (NF r)) 
---   | Just u <- rewriteAtRoot2 trs (toTerm(MApp l (NF r))) = (c, u)  
-rewrite3 trs (c, (MApp l r)) = (CApp2 l c, r) -- r not NF 
+rewrite3 trs (c, (MApp l r)) = (CApp2 l c, r)  
 
-
--- nf3 :: TRS -> Zipper -> Term
 nf3 :: TRS -> Zipper -> Term
 nf3 trs (Hole, (NF x)) = x
 nf3 trs t = nf3 trs (rewrite3 trs t) 
-     
+
 main = do
   file : _ <- getArgs
   m <- readTRSFile file
   case m of
     Left e    -> print e
     Right trs -> do
-      putStrLn (showTRS trs)
+      --putStrLn (showTRS trs)
       --putStrLn (show (nf1 trs (Con "main")))
       --putStrLn (show (nf2 trs (MCon "main")))
       putStrLn (show (nf3 trs (Hole, MCon "main")))
