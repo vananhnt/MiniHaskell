@@ -1,6 +1,6 @@
 -- name: NGUYEN THI VAN ANH
 -- id: 1910407
--- acknowledgements: 
+-- acknowledgements
 --------------------------------------
 import TRS
 import Parser
@@ -77,9 +77,9 @@ tranform :: MTerm -> Term
 tranform (MCon s) = Con s
 tranform (NF x) = x
 tranform (MApp l r) = App (tranform l) (tranform r)
+
 -- rewrite3 R (Cu1, t1) = (Cu2, t2) if (Cu1, t1) -> (Cu2, t2)
 rewrite3 :: TRS -> Zipper -> Zipper
-
 rewrite3 trs (CApp1 c t, NF x) 
   | Just u <- rewriteAtRoot2 trs (App x t) = (c, u)
   | otherwise = (c, NF (App x t))

@@ -1,3 +1,7 @@
+-- name: NGUYEN THI VAN ANH
+-- id: 1910407
+-- acknowledgements
+--------------------------------------
 module PatternMatching where
 import TRS
 import Parser
