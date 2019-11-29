@@ -81,7 +81,10 @@ ok (cons X1 (cons X2 (cons X3 (cons X4 (cons X5 (cons X6 (cons X7 (cons X8 X9)))
 fst nil = nil .
 fst (cons X XS) = X .
 
-genFromCorner (cons X1 (cons X3 (cons X7 X9))) = cons X1 (cons (subt 15 (add X1 X3)) (cons X3 (cons (subt 15 (add X1 X7)) (cons 5 (cons (subt 15 (add X3 (fst X9))) (cons X7 (cons (subt 15 (add X7 (fst X9))) [fst X9] ))))))) .
+genFromCorner (cons X1 (cons X3 (cons X7 X9))) = cons X1 (cons (subt 15 (add X1 X3)) 
+                                                (cons X3 (cons (subt 15 (add X1 X7)) 
+                                                (cons 5 (cons (subt 15 (add X3 (fst X9))) 
+                                                (cons X7 (cons (subt 15 (add X7 (fst X9))) [fst X9] ))))))) .
 magicSquare = filter ok (map2 genFromCorner (permutations [2, 4, 6, 8])).
 main = magicSquare .
 
