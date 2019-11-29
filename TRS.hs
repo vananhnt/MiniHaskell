@@ -5,17 +5,6 @@ import Data.List
 data Term = Var String | Con String | App Term Term
   deriving Eq
 
-data MTerm = MApp MTerm MTerm | MCon String | NF Term
-  deriving Show
-
-data Context = Hole| CApp1 Context Term | CApp2 MTerm Context
-
-type Substitution = [(String, Term)]
-             
-type Zipper = (Context, MTerm)
-
--- s. s 0
---x1 = MApp (MCon "s") (NF (App (Con "s") (Con "0")))
 type Rule = (Term, Term)
 
 type TRS = [Rule]

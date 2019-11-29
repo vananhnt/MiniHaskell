@@ -1,0 +1,90 @@
+not true  = false .
+not false = true .
+
+and true true = true.
+and false true = false.
+and true false = false.
+and false false = false.
+
+andList nil = false .
+andList [X] = X.
+andList (cons X XS) = and X (andList XS) .
+
+lt X 0         = false .
+lt 0 (s Y)     = true .
+lt (s X) (s Y) = lt X Y .
+
+eq X Y = and (not (lt X Y)) (not (lt Y X)).
+
+add 0     Y = Y .
+add (s X) Y = s (add X Y) .
+
+subt 0 Y = 0 .
+subt X 0 = X .
+subt (s X) (s Y) = subt X Y .
+
+mul 0 Y = 0 .
+mul (s 0) Y = Y .   
+mul (s X) Y = add Y (mul X Y) .
+
+append nil YS         = YS .
+append (cons X XS) YS = cons X (append XS YS) .
+
+map1 F nil = nil .
+map1 F (cons X XS) = append (F X) (map1 F XS) .
+
+map2 F nil = nil .
+map2 F (cons X XS) = cons (F X) (map2 F XS) .
+
+filter P nil         = nil .
+filter P (cons X XS) = if_filter P X XS (P X) .
+if_filter P X XS true  = cons X (filter P XS) .
+if_filter P X XS false = filter P XS .
+
+range 1     = nil .
+range (s X) = cons X (range X) .
+
+zipWith F nil nil = nil .
+zipWith F nil X = nil .
+zipWith F X nil = nil .
+zipWith F (cons X XS) (cons Y YS) = cons (F X Y) (zipWith F XS YS) .
+
+init nil = nil .
+init [X] = nil .
+init (cons X XS) = cons X (init XS) .
+
+prefixes nil       =  cons nil nil.
+prefixes XS = cons XS (prefixes (init XS)).
+
+reverse nil         = nil .
+reverse (cons X XS) = append (reverse XS) (cons X nil) .
+
+suffixes nil       = cons nil nil .
+suffixes (cons X XS) = (cons (cons X XS) (suffixes XS)).
+
+put X YS ZS = append YS (cons X ZS).
+interleave X XS = zipWith (put X) (reverse (prefixes XS)) (suffixes XS) .
+
+permutations nil = cons nil nil.
+permutations (cons X XS) = map1 (interleave X) (permutations XS) .
+
+ok (cons X1 (cons X2 (cons X3 (cons X4 (cons X5 (cons X6 (cons X7 (cons X8 X9)))))))) 
+   =    and (eq (add X1 (add X2 X3)) 15)
+        (and (eq (add X4 (add X5 X6)) 15)
+        (and (eq (add X7 (add X8 (fst X9))) 15)
+        (and (eq (add X1 (add X4 X7)) 15)
+        (and (eq (add X2 (add X5 X8)) 15) 
+        (and (eq (add X3 (add X6 (fst X9))) 15)
+        (and (eq (add X1 (add X5 (fst X9))) 15) 
+        (eq (add X3 (add X5 X7)) 15) )))))).
+
+fst nil = nil .
+fst (cons X XS) = X .
+
+genFromCorner (cons X1 (cons X3 (cons X7 X9))) = cons X1 (cons (subt 15 (add X1 X3)) 
+                                                (cons X3 (cons (subt 15 (add X1 X7)) 
+                                                (cons 5 (cons (subt 15 (add X3 (fst X9))) 
+                                                (cons X7 (cons (subt 15 (add X7 (fst X9))) [fst X9] ))))))) .
+magicSquare = filter ok (map2 genFromCorner (permutations [2, 4, 6, 8])).
+main = magicSquare .
+
