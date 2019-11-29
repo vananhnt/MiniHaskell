@@ -69,14 +69,19 @@ permutations nil = cons nil nil.
 permutations (cons X XS) = map1 (interleave X) (permutations XS) .
 
 ok (cons X1 (cons X2 (cons X3 (cons X4 (cons X5 (cons X6 (cons X7 (cons X8 X9)))))))) 
-   = andList [(eq (add X1 (add X2 X3)) 15), (eq (add X4 (add X5 X6)) 15),
-              (eq (add X7 (add X8 (fst X9))) 15), (eq (add X1 (add X4 X7)) 15),
-              (eq (add X2 (add X5 X8)) 15), (eq (add X3 (add X6 (fst X9))) 15),
-              (eq (add X1 (add X5 (fst X9))) 15), (eq (add X3 (add X5 X7)) 15)].
+   =    and (eq (add X1 (add X2 X3)) 15)
+        (and (eq (add X4 (add X5 X6)) 15)
+        (and (eq (add X7 (add X8 (fst X9))) 15)
+        (and (eq (add X1 (add X4 X7)) 15)
+        (and (eq (add X2 (add X5 X8)) 15) 
+        (and (eq (add X3 (add X6 (fst X9))) 15)
+        (and (eq (add X1 (add X5 (fst X9))) 15) 
+        (eq (add X3 (add X5 X7)) 15) )))))).
 
 fst nil = nil .
 fst (cons X XS) = X .
 
-magicSquare =  filter ok (permutations (range 10)).
-main = magicSquare.
+genFromCorner (cons X1 (cons X3 (cons X7 X9))) = cons X1 (cons (subt 15 (add X1 X3)) (cons X3 (cons (subt 15 (add X1 X7)) (cons 5 (cons (subt 15 (add X3 (fst X9))) (cons X7 (cons (subt 15 (add X7 (fst X9))) [fst X9] ))))))) .
+magicSquare = filter ok (map2 genFromCorner (permutations [2, 4, 6, 8])).
+main = magicSquare .
 

@@ -1,0 +1,27 @@
+{-
+ 2, 4, 6, 8
+ 1, 3, 7, 9
+
+ X1 X2 X3    2 1 4    a b a
+ X4 X5 X6    3 5 7    b b b
+ X7 X8 X9    6 9 8    a b a
+ permutations (cons X XS) = map1 (interleave X) (permutations XS) .
+-}
+ok (cons X1 (cons X2 (cons X3 (cons X4 (cons X5 (cons X6 (cons X7 (cons X8 X9)))))))) 
+   =    and (eq (add X1 (add X2 X3)) 15)
+        (and (eq (add X4 (add X5 X6)) 15)
+        (and (eq (add X7 (add X8 (fst X9))) 15)
+        (and (eq (add X1 (add X4 X7)) 15)
+        (and (eq (add X2 (add X5 X8)) 15) 
+        (and (eq (add X3 (add X6 (fst X9))) 15)
+        (and (eq (add X1 (add X5 (fst X9))) 15) 
+             (eq (add X3 (add X5 X7)) 15) )))))).
+
+fst nil = nil .
+fst (cons X XS) = X .
+
+fstList (cons X1 (cons X2 (cons X3 X4))) =  cons X1 (cons X2 (cons X3 (cons (fst X4) (cons 5 (cons (subt 10 (fst X4)) (cons (subt 10 X3) (cons (subt 10 X2) [subt 10 X1] ))))))) .
+sndList (cons X6 (cons X7 (cons X8 X9))) =  cons (subt 10 (fst X9)) (cons (subt 10 X8) (cons (subt 10 X7) (cons (subt 10 X6) (cons 5 (cons X6 (cons X7 (cons X8 [fst X9] ))))))) .
+template (cons X1 (cons X3 (cons X7 X9))) = cons X1 (cons X2 (cons X3 (cons X4 (cons X5 (cons X6 (cons X7 (cons X8 [fst X9] ))))))) .
+
+magicSquare =  permutations (range 4).
